@@ -1,61 +1,37 @@
-import { Router } from "express";
-
-import {
-    createEvent,
-    getAllEvents,
-    getEventById,
-    updateEvent,
-    deleteEvent,
-} from "../controllers/eventController";
-
+import express, { Router } from "express";
 import { validateRequest } from "../middleware/validate";
 import { eventSchemas } from "../validation/eventSchemas";
+import * as eventController from "../controllers/eventController";
 
-const router = Router();
+const router: Router = express.Router();
 
-/**
- * GET /events
- */
 router.get(
     "/",
-    validateRequest(eventSchemas.list),
-    getAllEvents
+    eventController.getAllEvents
 );
 
-/**
- * GET /events/:id
- */
-router.get(
-    "/:id",
-    validateRequest(eventSchemas.getById),
-    getEventById
-);
-
-/**
- * POST /events
- */
 router.post(
     "/",
     validateRequest(eventSchemas.create),
-    createEvent
+    eventController.createEvent
 );
 
-/**
- * PUT /events/:id
- */
+router.get(
+    "/:id",
+    validateRequest(eventSchemas.getById),
+    eventController.getEventById
+);
+
 router.put(
     "/:id",
     validateRequest(eventSchemas.update),
-    updateEvent
+    eventController.updateEvent
 );
 
-/**
- * DELETE /events/:id
- */
 router.delete(
     "/:id",
     validateRequest(eventSchemas.delete),
-    deleteEvent
+    eventController.deleteEvent
 );
 
 export default router;
