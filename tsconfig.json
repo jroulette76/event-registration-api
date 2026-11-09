@@ -8,6 +8,7 @@
         "forceConsistentCasingInFileNames": true,
         "outDir": "./dist",
         "resolveJsonModule": true,
+        "ignoreDeprecations": "6.0",
         "noImplicitAny": true,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
