@@ -211,3 +211,40 @@ describe("updateEvent", () => {
         expect(result.updatedAt).toEqual(mockUpdatedAt);
     });
 });
+
+describe("deleteEvent", () => {
+    it("should successfully delete an event", async () => {
+        // Arrange
+        const mockEventId = "test-event-id";
+
+        const mockDoc = {
+            id: mockEventId,
+            data: () => ({
+                name: "Test Event",
+                date: new Date("2027-05-01"),
+                capacity: 100,
+                registrationCount: 0,
+                status: "active",
+                category: "general",
+            }),
+        };
+
+        (firestoreRepository.getDocumentById as jest.Mock)
+            .mockResolvedValue(mockDoc);
+
+        (firestoreRepository.deleteDocument as jest.Mock)
+            .mockResolvedValue(undefined);
+
+        // Act
+        const result = await eventService.deleteEvent(mockEventId);
+
+        // Assert
+        expect(firestoreRepository.getDocumentById)
+            .toHaveBeenCalledWith("events", mockEventId);
+
+        expect(firestoreRepository.deleteDocument)
+            .toHaveBeenCalledWith("events", mockEventId);
+
+        expect(result).toBeUndefined();
+    });
+});
