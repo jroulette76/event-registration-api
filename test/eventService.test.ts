@@ -117,7 +117,6 @@ describe("getEventById", () => {
         const result = await eventService.getEventById(mockEventId);
 
         // Assert
-        // Assert
         expect(firestoreRepository.getDocumentById)
             .toHaveBeenCalledWith("events", mockEventId);
 
@@ -131,5 +130,84 @@ describe("getEventById", () => {
         expect(result.category).toBe("general");
         expect(result.createdAt).toBeInstanceOf(Date);
         expect(result.updatedAt).toBeInstanceOf(Date);
+    });
+});
+
+describe("updateEvent", () => {
+    it("should successfully update an event", async () => {
+        // Arrange
+        const mockEventId = "test-event-id";
+
+        const mockCreatedAt = new Date("2026-01-01");
+        const mockUpdatedAt = new Date("2026-11-10");
+
+        const mockUpdatedEvent = {
+            id: mockEventId,
+            name: "Updated Test Event",
+            date: new Date("2027-05-01"),
+            capacity: 150,
+            registrationCount: 0,
+            status: "active",
+            category: "general",
+            createdAt: mockCreatedAt,
+            updatedAt: mockUpdatedAt,
+        };
+
+        (firestoreRepository.updateDocument as jest.Mock)
+            .mockResolvedValue(undefined);
+
+        (firestoreRepository.getDocumentById as jest.Mock)
+            .mockResolvedValue({
+                id: mockEventId,
+                data: () => ({
+                    name: mockUpdatedEvent.name,
+                    date: mockUpdatedEvent.date,
+                    capacity: mockUpdatedEvent.capacity,
+                    registrationCount: mockUpdatedEvent.registrationCount,
+                    status: mockUpdatedEvent.status,
+                    category: mockUpdatedEvent.category,
+                    createdAt: {
+                        toDate: () => mockCreatedAt,
+                    },
+                    updatedAt: {
+                        toDate: () => mockUpdatedAt,
+                    },
+                }),
+            });
+
+        // Act
+        const result = await eventService.updateEvent(
+            mockEventId,
+            {
+                name: "Updated Test Event",
+                capacity: 150,
+            }
+        );
+
+        // Assert
+        expect(firestoreRepository.updateDocument)
+            .toHaveBeenCalledWith(
+                "events",
+                mockEventId,
+                expect.objectContaining({
+                    name: "Updated Test Event",
+                    capacity: 150,
+                    updatedAt: expect.any(Date),
+                })
+            );
+
+        expect(firestoreRepository.getDocumentById)
+            .toHaveBeenCalledWith("events", mockEventId);
+
+        expect(result).toBeDefined();
+        expect(result.id).toBe(mockEventId);
+        expect(result.name).toBe("Updated Test Event");
+        expect(result.date).toEqual(mockUpdatedEvent.date);
+        expect(result.capacity).toBe(150);
+        expect(result.registrationCount).toBe(0);
+        expect(result.status).toBe("active");
+        expect(result.category).toBe("general");
+        expect(result.createdAt).toEqual(mockCreatedAt);
+        expect(result.updatedAt).toEqual(mockUpdatedAt);
     });
 });
