@@ -92,27 +92,9 @@ export const updateEvent = async (
     try {
         const id = req.params.id as string;
 
-        const {
-            name,
-            date,
-            capacity,
-            registrationCount,
-            status,
-            category,
-        } = req.body;
-
-        const updateData = {
-            name,
-            date,
-            capacity,
-            registrationCount,
-            status,
-            category,
-        };
-
         const updatedEvent: Event = await eventService.updateEvent(
             id,
-            updateData
+            req.body
         );
 
         res.status(HTTP_STATUS.OK).json(
