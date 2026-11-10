@@ -22,6 +22,9 @@ export const getAllEvents = async (): Promise<Event[]> => {
             return {
                 id: doc.id,
                 ...data,
+                date: data.date?.toDate
+                    ? data.date.toDate()
+                    : data.date,
                 createdAt: data.createdAt?.toDate() || new Date(),
                 updatedAt: data.updatedAt?.toDate() || new Date(),
             } as Event;
@@ -76,10 +79,16 @@ export const getEventById = async (
         }
 
         const data = doc.data();
+        if (!data) {
+            throw new Error(`Event with ID ${id} has no data`);
+        }
 
         return {
             id: doc.id,
             ...data,
+            date: data?.date?.toDate
+                ? data.date.toDate()
+                : data.date,
             createdAt: data?.createdAt?.toDate() || new Date(),
             updatedAt: data?.updatedAt?.toDate() || new Date(),
         } as Event;
