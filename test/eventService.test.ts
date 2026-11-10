@@ -48,3 +48,45 @@ describe("Event Service", () => {
         expect(result.name).toBe(mockEventData.name);
     });
 });
+
+it("should retrieve all events successfully", async () => {
+    // Arrange
+    const mockSnapshot = {
+        docs: [
+            {
+                id: "event-1",
+                data: () => ({
+                    name: "Test Event",
+                    date: {
+                        toDate: () => new Date("2027-05-01"),
+                    },
+                    capacity: 100,
+                    registrationCount: 0,
+                    status: "active",
+                    category: "general",
+                    createdAt: {
+                        toDate: () => new Date(),
+                    },
+                    updatedAt: {
+                        toDate: () => new Date(),
+                    },
+                }),
+            },
+        ],
+    };
+
+    (
+        firestoreRepository.getDocuments as jest.Mock
+    ).mockResolvedValue(mockSnapshot);
+
+    // Act
+    const result = await eventService.getAllEvents();
+
+    // Assert
+    expect(
+        firestoreRepository.getDocuments
+    ).toHaveBeenCalledWith("events");
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe("Test Event");
+});
