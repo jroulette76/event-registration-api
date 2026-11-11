@@ -49,4 +49,32 @@ describe("Validation Middleware", () => {
             HTTP_STATUS.BAD_REQUEST
         );
     });
+
+    it("should reject an event with a missing name", () => {
+        // Arrange
+        mockReq.body = {
+            date: "2027-05-01T09:00:00.000Z",
+            capacity: 100,
+        };
+
+        const middleware = validateRequest(
+            eventSchemas.create
+        );
+
+        // Act
+        middleware(
+            mockReq as Request,
+            mockRes as Response,
+            mockNext
+        );
+
+        // Assert
+        expect(mockNext).not.toHaveBeenCalled();
+
+        expect(mockRes.status).toHaveBeenCalledWith(
+            HTTP_STATUS.BAD_REQUEST
+        );
+
+        expect(mockRes.json).toHaveBeenCalled();
+    });
 });
