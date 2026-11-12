@@ -105,6 +105,8 @@ export const updateEvent = async (
     eventData: Partial<Event>
 ): Promise<Event> => {
     try {
+        await getEventById(id);
+        
         const updateData = {
             ...eventData,
             updatedAt: new Date(),
