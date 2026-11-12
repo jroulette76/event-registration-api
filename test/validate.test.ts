@@ -77,4 +77,33 @@ describe("Validation Middleware", () => {
 
         expect(mockRes.json).toHaveBeenCalled();
     });
+
+    it("should reject an event with an invalid capacity", () => {
+        // Arrange
+        mockReq.body = {
+            name: "Test Event",
+            date: "2027-05-01T09:00:00.000Z",
+            capacity: -1,
+        };
+
+        const middleware = validateRequest(
+            eventSchemas.create
+        );
+
+        // Act
+        middleware(
+            mockReq as Request,
+            mockRes as Response,
+            mockNext
+        );
+
+        // Assert
+        expect(mockNext).not.toHaveBeenCalled();
+
+        expect(mockRes.status).toHaveBeenCalledWith(
+            HTTP_STATUS.BAD_REQUEST
+        );
+
+        expect(mockRes.json).toHaveBeenCalled();
+    });
 });
