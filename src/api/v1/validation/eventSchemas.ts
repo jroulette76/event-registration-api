@@ -6,32 +6,17 @@ export const eventSchemas = {
         body: Joi.object({
             name: Joi.string()
                 .min(3)
-                .required()
-                .messages({
-                    "any.required": "Name is required",
-                    "string.empty": "Name cannot be empty",
-                    "string.min": "Name must be at least 3 characters long",
-                }),
+                .required(),
 
             date: Joi.date()
                 .iso()
                 .greater("now")
-                .required()
-                .messages({
-                    "any.required": "Date is required",
-                    "date.base": "Date must be a valid date",
-                    "date.greater": "Date must be in the future",
-                }),
+                .required(),
 
             capacity: Joi.number()
                 .integer()
                 .min(5)
-                .required()
-                .messages({
-                    "any.required": "Capacity is required",
-                    "number.integer": "Capacity must be an integer",
-                    "number.min": "Capacity must be at least 5",
-                }),
+                .required(),
 
             registrationCount: Joi.number()
                 .integer()
