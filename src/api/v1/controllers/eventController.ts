@@ -16,7 +16,7 @@ export const getAllEvents = async (
         const events: Event[] = await eventService.getAllEvents();
 
         res.status(HTTP_STATUS.OK).json(
-            successResponse(events, "Events retrieved successfully")
+            successResponse(events, "Events retrieved")
         );
     } catch (error) {
         next(error);
@@ -37,7 +37,7 @@ export const getEventById = async (
         const event: Event = await eventService.getEventById(id);
 
         res.status(HTTP_STATUS.OK).json(
-            successResponse(event, "Event retrieved successfully")
+            successResponse(event, "Event retrieved")
         );
     } catch (error) {
         const message = (error as Error).message;
@@ -82,7 +82,7 @@ export const createEvent = async (
         const newEvent: Event = await eventService.createEvent(eventData);
 
         res.status(HTTP_STATUS.CREATED).json(
-            successResponse(newEvent, "Event created successfully")
+            successResponse(newEvent, "Event created")
         );
     } catch (error) {
         next(error);
@@ -106,7 +106,7 @@ export const updateEvent = async (
         );
 
         res.status(HTTP_STATUS.OK).json(
-            successResponse(updatedEvent, "Event updated successfully")
+            successResponse(updatedEvent, "Event updated")
         );
     } catch (error) {
         const message = (error as Error).message;
@@ -135,7 +135,7 @@ export const deleteEvent = async (
         await eventService.deleteEvent(id);
 
         res.status(HTTP_STATUS.OK).json(
-            successResponse(null, "Event deleted successfully")
+            successResponse(null, "Event deleted")
         );
     } catch (error) {
         const message = (error as Error).message;
