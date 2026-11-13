@@ -1,7 +1,6 @@
 // import the express application and type definition
 import express, { Express } from "express";
 import morgan from "morgan";
-import { errorHandler } from "./api/v1/middleware/errorHandler";
 
 import eventRoutes from "./api/v1/routes/eventRoutes";
 
@@ -46,7 +45,5 @@ app.get("/api/v1/health", (req, res) => {
 // Event Routes
 app.use("/api/v1/events", eventRoutes);
 
-// Error Handler
-app.use(errorHandler);
 
 export default app;

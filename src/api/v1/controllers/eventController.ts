@@ -40,6 +40,14 @@ export const getEventById = async (
             successResponse(event, "Event retrieved successfully")
         );
     } catch (error) {
+        const message = (error as Error).message;
+
+        if (message.includes("not found")) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message,
+            });
+            return;
+        }
         next(error);
     }
 };
@@ -101,6 +109,14 @@ export const updateEvent = async (
             successResponse(updatedEvent, "Event updated successfully")
         );
     } catch (error) {
+        const message = (error as Error).message;
+
+         if (message.includes("not found")) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message,
+            });
+            return;
+         }
         next(error);
     }
 };
@@ -122,6 +138,14 @@ export const deleteEvent = async (
             successResponse(null, "Event deleted successfully")
         );
     } catch (error) {
+        const message = (error as Error).message;
+
+        if (message.includes("not found")) {
+            res.status(HTTP_STATUS.NOT_FOUND).json({
+                message,
+            });
+            return;
+        }
         next(error);
     }
 };
