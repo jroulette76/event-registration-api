@@ -15,9 +15,11 @@ export const getAllEvents = async (
     try {
         const events: Event[] = await eventService.getAllEvents();
 
-        res.status(HTTP_STATUS.OK).json(
-            successResponse(events, "Events retrieved")
-        );
+        res.status(HTTP_STATUS.OK).json({
+            message: "Events retrieved",
+            count: events.length,
+            data: events,
+        });
     } catch (error) {
         next(error);
     }
